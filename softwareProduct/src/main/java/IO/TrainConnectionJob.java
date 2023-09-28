@@ -2,6 +2,7 @@ package IO;
 
 import framework.Handleable;
 
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -14,7 +15,7 @@ public class TrainConnectionJob {
     private String error = "";
     private final String filepath;
 
-    private List<List<String>> connections;
+    private List<LinkedList<String>> connections;
 
     /**
      * Constructs an implicit TrainConnectionJob.
@@ -28,7 +29,7 @@ public class TrainConnectionJob {
      * @param filepath represents Path of the file that holds connection data.
      * @param connections represents the train liens.
      */
-    public TrainConnectionJob(String filepath, List<List<String>> connections) {
+    public TrainConnectionJob(String filepath, List<LinkedList<String>> connections) {
         this.filepath = filepath;
         this.connections = connections;
     }
@@ -63,7 +64,7 @@ public class TrainConnectionJob {
      *
      * @return all connections for all trains.
      */
-    public List<List<String>> getConnections() {
+    public List<LinkedList<String>> getConnections() {
         return this.connections;
     }
 

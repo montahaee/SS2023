@@ -7,10 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -37,7 +34,7 @@ class MinimizerTest {
         Path path = Paths.get("src/test/resource/ihk_beispiel_1.in");
         TrainConnectionJob connectionJob = new TrainConnectionJob(path.toString(), list_1);
 
-        List<String> expected = new LinkedList<> (Arrays.asList("FFM","H"));
+        Set<String> expected = new LinkedHashSet<> (Arrays.asList("FFM","H"));
 
         assertEquals(expected, minimizer.handle(connectionJob).stations());
     }

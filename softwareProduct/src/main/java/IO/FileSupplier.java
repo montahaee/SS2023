@@ -11,10 +11,7 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Stream;
 
 /**
@@ -30,7 +27,6 @@ public class FileSupplier implements Suppliable<TrainConnectionJob>, Runnable {
 
     private Path sourcePath;
     private final DataStream<TrainConnectionJob> dataStream;
-//    private boolean readable = true;
     private final List<Path> filepaths;
     public FileSupplier(String sourcePath, DataStream<TrainConnectionJob> dataStream) throws FileAccessException {
         this.sourcePath = Path.of(sourcePath);
@@ -91,7 +87,7 @@ public class FileSupplier implements Suppliable<TrainConnectionJob>, Runnable {
     }
 
     /**
-     * Reads data and produces specified element.
+     * Reads data from a file in the {@link #sourcePath} and produces specified element.
      * <p>
      *
      * @throws IncorrectDataFormatException as Data should be formatted correctly in order to location.
@@ -100,7 +96,7 @@ public class FileSupplier implements Suppliable<TrainConnectionJob>, Runnable {
     public TrainConnectionJob read() throws IncorrectDataFormatException {
         String[] lineContents;
         String massage = "";
-        List<List<String>> connections = new ArrayList<>();
+        List<LinkedList<String>> connections = new ArrayList<>();
         try(BufferedReader bf = new BufferedReader(Files.newBufferedReader(sourcePath))) {
             String line;
             boolean isDuplicated = false;
@@ -121,7 +117,7 @@ public class FileSupplier implements Suppliable<TrainConnectionJob>, Runnable {
                         line = line.replaceAll("\\s", "");
                     }
                     if ((lineContents = line.trim().split(";")).length >= 1) {
-                        List<String> temp = new ArrayList<>();
+                        LinkedList<String> temp = new LinkedList<>();
                         for (String content : lineContents) {
                             if (!content.matches(abbreviation)) {
                                 System.out.println("Unexpected token in the input file: " + sourcePath.getFileName());
@@ -149,7 +145,7 @@ public class FileSupplier implements Suppliable<TrainConnectionJob>, Runnable {
 //                           readable = false;
                            massage = "No abbreviation found in the input File.";
                            System.out.println(System.lineSeparator());
-                           System.out.println("No abbreviation found in the input File: " + sourcePath.getFileName());
+                           System.out.println(massage.replace(".",": ") + sourcePath.getFileName());
                            continue;
                         }
                     }
@@ -205,17 +201,6 @@ public class FileSupplier implements Suppliable<TrainConnectionJob>, Runnable {
                 outputFilename +=  path.toString().substring(path.toString().lastIndexOf("\\")+1,
                         path.toString().lastIndexOf("."));
 
-//                if (!readable) {
-//                    outputFilename += ".err";
-//                } else {
-//                    outputFilename += ".out";
-//                }
-//                List<Path> fileList = getPaths(path)
-//                if (Files.exists(Path.of(outputFilename))) {
-//                    processedFiles.add(path);
-//
-//                    continue;
-//                }
                 if (isFileExit(path,outputFilename)) {
                     processedFiles.add(path);
 

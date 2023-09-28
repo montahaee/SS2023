@@ -47,7 +47,7 @@ public class Minimizer implements Handleable<TrainConnectionJob, Minimization>, 
      */
     @Override
     public Minimization handle(TrainConnectionJob issue) {
-        List<List<String>> connections = issue.getConnections();
+        List<LinkedList<String>> connections = issue.getConnections();
 /*        The followings are commented because of the testing
           the reduction rules in MinimizerTest. After testing,
           You can uncomment those.
@@ -67,28 +67,28 @@ public class Minimizer implements Handleable<TrainConnectionJob, Minimization>, 
      *                    representing train line connections.
      * @return A list of popular routes for srvice stations.
      */
-    private List<String> findPopularRoute(List<List<String>> connections) {
+    private Set<String> findPopularRoute(List<LinkedList<String>> connections) {
         boolean findAllRoute = false;
 
-        List<List<String>> lastIntersection = new ArrayList<>();
+        List<LinkedList<String>> lastIntersection = new ArrayList<>();
 
-        List<String> result = new ArrayList<>();
+        Set<String> result = new HashSet<>();
 
         while (!findAllRoute) {
             List<String> maxList = findMaxList(connections);
-            List<List<String>> commonLines = findCommonStationsTrainLines(connections, maxList);
+            List<LinkedList<String>> commonLines = findCommonStationsTrainLines(connections, maxList);
             Map.Entry<String, Long> mostRepeated = findMostRepeatedStation(commonLines);
             if (mostRepeated == null) {
                 break;
             }
-            if (mostRepeated.getValue() >= 1 && !result.contains(mostRepeated.getKey()))
+            if (mostRepeated.getValue() >= 1)
                 result.add(mostRepeated.getKey());
 
             // Check if there are more connections to process
             if (connections.isEmpty()) {
                 findAllRoute = true;
             } else {
-                List<List<String>> newConnections = findCommonStationsTrainLines(commonLines, findMaxList(commonLines));
+                List<LinkedList<String>> newConnections = findCommonStationsTrainLines(commonLines, findMaxList(commonLines));
                 maxList = findMaxList(connections);
                 lastIntersection = findCommonStationsTrainLines(newConnections, maxList);
             }
@@ -96,7 +96,9 @@ public class Minimizer implements Handleable<TrainConnectionJob, Minimization>, 
                 findMostRepeatedStation(lastIntersection) != null) {
                 // Add it to the result list
                 Map.Entry<String, Long> lastMostRepeated = findMostRepeatedStation(lastIntersection);
-                if (lastMostRepeated.getValue() >= 1 && !result.contains(lastMostRepeated.getKey())) result.add(lastMostRepeated.getKey());
+                if (lastMostRepeated.getValue() >= 1) {
+                    result.add(lastMostRepeated.getKey());
+                }
             }
         }
         return result;
@@ -112,10 +114,10 @@ public class Minimizer implements Handleable<TrainConnectionJob, Minimization>, 
      * @return A list of lists of strings representing the common stations between
      * the train lines in connections and the pivot train line.
      */
-    private List<List<String>> findCommonStationsTrainLines(List<List<String>> connections, List<String> pivot) {
-        List<List<String>> intersections = new ArrayList<>();
-        for (List<String> connection : connections) {
-            List<String> copy = new ArrayList<>(connection);
+    private List<LinkedList<String>> findCommonStationsTrainLines(List<LinkedList<String>> connections, List<String> pivot) {
+        List<LinkedList<String>> intersections = new ArrayList<>();
+        for (LinkedList<String> connection : connections) {
+            LinkedList<String> copy = new LinkedList<>(connection);
             copy.retainAll(pivot);
             intersections.add(copy);
         }
@@ -128,7 +130,7 @@ public class Minimizer implements Handleable<TrainConnectionJob, Minimization>, 
      * @param connections A list of lists of strings representing train line connections.
      * @return A Map.Entry object containing the most repeated station and its frequency.
      */
-    private Map.Entry<String, Long> findMostRepeatedStation(List<List<String>> connections) {
+    private Map.Entry<String, Long> findMostRepeatedStation(List<LinkedList<String>> connections) {
         // store the result of the max operation in a variable
         Optional<Map.Entry<String, Long>> mostRepeatedEntry = connections.stream().flatMap(List::stream).collect(Collectors.groupingBy (Function.identity (),
                 Collectors.counting ())).entrySet().stream().max(Map.Entry.comparingByValue ());
@@ -142,7 +144,7 @@ public class Minimizer implements Handleable<TrainConnectionJob, Minimization>, 
      * @param connections connections A list of lists of strings representing train line connections.
      * @return A list of strings representing the train line with the maximum number of stations.
      */
-    private static List<String> findMaxList(List<List<String>> connections) {
+    private static List<String> findMaxList(List<LinkedList<String>> connections) {
         List<String> maxList = connections.stream().max(Comparator.comparingInt(List::size)).orElse(null);
         connections.remove(maxList);
         return maxList;

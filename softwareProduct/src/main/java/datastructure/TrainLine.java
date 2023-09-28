@@ -2,10 +2,13 @@ package datastructure;
 
 import exception.InvalidTrainLineException;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Objects;
 
 /**
- * Füt mehr objjektive Aspekt
+ * This class represent a trin
  */
 public class TrainLine implements Cloneable {
     private String from;
@@ -24,6 +27,24 @@ public class TrainLine implements Cloneable {
         }
         this.from = from;
         this.to = to;
+    }
+
+    /**
+     * Constructs a copy of the other.
+     * @param other the TrainLine object to copy from.
+     */
+    public TrainLine(TrainLine other) {
+        this.from = other.getFrom();
+        this.to = other.getTo();
+    }
+
+    //TODO addFrom, addTo, and add based on linkedList
+    public void addFrom() {
+        List<String >  t = new ArrayList<>();
+        t.add("A");
+        LinkedList<String> test = new LinkedList<>(t);
+        var to = test.contains("A");
+
     }
 
     /**
@@ -58,15 +79,6 @@ public class TrainLine implements Cloneable {
     }
 
     /**
-     * Constructs a copy of the other.
-     * @param other the TrainLine object to copy from.
-     */
-    public TrainLine(TrainLine other) {
-        this.from = other.getFrom();
-        this.to = other.getTo();
-    }
-
-    /**
      *
      * @return the previous train stain at the line.
      */
@@ -98,12 +110,24 @@ public class TrainLine implements Cloneable {
         this.to = to;
     }
 
+    /**
+     * Creates and returns a copy of this TrainLine object.
+     * The precise meaning of "copy" may depend on the class of the object.
+     * The general intent is that, for any object x, the expression:
+     * x.clone() != x will be true, and that the expression:
+     * x.clone().getClass() == x.getClass() will be true, but these are not absolute requirements.<br>
+     * <b>Note</b> that the `clone()` method does not call any constructors.
+     * @return a clone of this instance.
+     * @throws CloneNotSupportedException if the object's class does not support the `Cloneable` interface.
+     * Subclasses like Trinaline that override the `clone()` method can also throw this
+     * exception to indicate that an instance cannot be cloned.
+     */
     @Override
     public TrainLine clone() {
         try {
             return (TrainLine) super.clone();
         } catch (CloneNotSupportedException e) {
-            e.printStackTrace();
+            System.err.println(e.getMessage());
             return null;
         }
     }
@@ -124,6 +148,13 @@ public class TrainLine implements Cloneable {
         return this.from.equals(that.getFrom()) && this.to.equals(that.getTo());
     }
 
+    /**
+     * This method is supported for the benefit of hash tables such as those provided by `HashMap`.
+     * The general contract of `hashCode` is:
+     * - Whenever it is invoked on the same object more than once during an execution of a Java application, the `hashCode` method must consistently return the same integer, provided no information used in `equals` comparisons on the object is modified.
+     * - If two objects are equal according to the {@link #equals(Object)} method, then calling the `hashCode` method on each of the two objects must produce the same integer result.
+     * @return a hash code value for this object.
+     */
     @Override
     public int hashCode() {
         return Objects.hash(this.from, this.to);
