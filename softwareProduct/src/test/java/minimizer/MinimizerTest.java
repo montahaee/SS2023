@@ -24,13 +24,13 @@ class MinimizerTest {
     void handle() {
 
 //      A matrixwaise representation for the test the first example in the task sheet.
-        List<List<String>> list_1 = new ArrayList<>();
-        list_1.add(List.of("HH","H","B","L"));
-        list_1.add(List.of("K","FFM","S"));
-        list_1.add(List.of("HH","H","FFM","N","M"));
-        list_1.add(List.of("H","FFM","N"));
-        list_1.add(List.of("DA","FFM","N"));
-        list_1.add(List.of("HH","FFM","M"));
+        List<LinkedList<String>> list_1 = new ArrayList<>();
+        list_1.add(new LinkedList<>(List.of("HH","H","B","L")));
+        list_1.add(new LinkedList<>(List.of("K","FFM","S")));
+        list_1.add(new LinkedList<>(List.of("HH","H","FFM","N","M")));
+        list_1.add(new LinkedList<>(List.of("H","FFM","N")));
+        list_1.add(new LinkedList<>(List.of("DA","FFM","N")));
+        list_1.add(new LinkedList<>(List.of("HH","FFM","M")));
         Path path = Paths.get("src/test/resource/ihk_beispiel_1.in");
         TrainConnectionJob connectionJob = new TrainConnectionJob(path.toString(), list_1);
 
@@ -53,11 +53,11 @@ class MinimizerTest {
         input_2.add(new LinkedList<>(List.of("M","DA","H","B")));
         input_2.add(new LinkedList<>(List.of("C","M","H","E")));
 //      expected_2 for the test for 3rd example in the task sheet.
-        List<List<String>> expected_2 = new ArrayList<>();
-        expected_2.add(List.of("S","H","K"));
-        expected_2.add(List.of("FFM","H","K"));
-        expected_2.add(List.of("M","H","B"));
-        expected_2.add(List.of("C","M","H","E"));
+        List<LinkedList<String>> expected_2 = new ArrayList<>();
+        expected_2.add(new LinkedList<>(List.of("S","H","K")));
+        expected_2.add(new LinkedList<>(List.of("FFM","H","K")));
+        expected_2.add(new LinkedList<>(List.of("M","H","B")));
+        expected_2.add(new LinkedList<>(List.of("C","M","H","E")));
 
         minimizer.TestSecondReduction(input_2);
         assertEquals(expected_2, input_2);

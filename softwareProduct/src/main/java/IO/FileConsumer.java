@@ -5,6 +5,7 @@ import framework.Consumable;
 import framework.Handleable;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -46,11 +47,12 @@ public class FileConsumer implements Consumable<Handleable.Data<TrainConnectionJ
         if (inputPath.indexOf(".") <= 0) {
             throw new InputMismatchException("The input data doesn't have extension.");
         }
+        String fileSeparator = File.separator;
 
-        String targetPath = inputPath.toString().substring(0,
-                inputPath.toString().lastIndexOf("\\")+1);
+        String targetPath = inputPath.substring(0,
+                inputPath.lastIndexOf(fileSeparator)+1);
         targetPath += "optimized_";
-        targetPath += inputPath.substring(inputPath.lastIndexOf("\\") + 1, inputPath.lastIndexOf("."));
+        targetPath += inputPath.substring(inputPath.lastIndexOf(fileSeparator) + 1, inputPath.lastIndexOf("."));
 
         StringBuilder sb = new StringBuilder();
         if (out.stations().isEmpty()){

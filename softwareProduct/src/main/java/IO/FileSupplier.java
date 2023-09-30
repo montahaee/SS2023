@@ -191,14 +191,15 @@ public class FileSupplier implements Suppliable<TrainConnectionJob>, Runnable {
     @Override
     public void run() {
         Set<Path> processedFiles = new HashSet<>();
+        String fileSeparator = File.separator;
         while (processedFiles.size() != filepaths.size()) {
 
             for (Path path : filepaths) {
 
                 String outputFilename = path.toString().substring(0,
-                        path.toString().lastIndexOf("\\")+1);
+                        path.toString().lastIndexOf(fileSeparator)+1);
                 outputFilename += "optimized_";
-                outputFilename +=  path.toString().substring(path.toString().lastIndexOf("\\")+1,
+                outputFilename +=  path.toString().substring(path.toString().lastIndexOf(fileSeparator)+1,
                         path.toString().lastIndexOf("."));
 
                 if (isFileExit(path,outputFilename)) {
@@ -211,7 +212,7 @@ public class FileSupplier implements Suppliable<TrainConnectionJob>, Runnable {
                     this.dataStream.put(read());
                     Thread.sleep(50);
                 } catch (InterruptedException | IncorrectDataFormatException e) {
-                    e.printStackTrace();
+                    System.err.println(e.getMessage());
                     Thread.currentThread().interrupt();
                 }
 
