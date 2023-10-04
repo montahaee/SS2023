@@ -47,7 +47,7 @@ public class DataStream<S> {
             try {
                 wait();
             } catch (Exception e) {
-                e.printStackTrace();
+                System.err.println(e.getMessage());
             }
         }
         this.counter.decrementAndGet();

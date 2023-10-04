@@ -17,24 +17,36 @@ public class TestDrivedeveloping {
 //        System.out.println(System.lineSeparator());
         //make a 2D List
         List<List<String>> list = new ArrayList<>();
-        list.add(List.of("HH","H","B","L"));
-        list.add(List.of("K","FFM","S"));
-        list.add(List.of("HH","H","FFM","N","M"));
-        list.add(List.of("H","FFM","N"));
-        list.add(List.of("DA","FFM","N"));
-        list.add(List.of("HH","FFM","M"));
+        list.add(List.of("S","DA","H","K"));
+        list.add(List.of("FFM","DA","H", "K"));
+        list.add(List.of("M","DA","B", "K"));
+        list.add(List.of("M","B","K"));
+        List<List<String>> list2 = new ArrayList<>();
+        list2.add(List.of("HH","H","B","L"));
+        list2.add(List.of("K","FFM","S"));
+        list2.add(List.of("HH","H","FFM","N","M"));
+        list2.add(List.of("H","FFM","N"));
+        list2.add(List.of("DA","FFM","N"));
+        list2.add(List.of("HH","FFM","M"));
+
 //        var t = list;
 //        removeStationDuplication(t);
 //        System.out.println("test: "+t);
 //        System.out.println(Arrays.toString(findMaxList(arr)));
 //        System.out.println(System.lineSeparator());
         System.out.println(list);
-        removeSuperSets(list);
-        System.out.println(list);
+//        removeSuperSets(list);
+///        System.out.println(list);
         System.out.println();
         System.out.println(findPopularRoute(list));
         List<String> maxList1 = findMaxList(list);  //35 done 7
-        System.out.println(list);
+        System.out.println("\n");
+        System.out.println();
+        System.out.println();
+        System.out.println();
+        System.out.println(list2);
+        System.out.println(findPopularRoute(list2));
+
 //        removeStationDuplication(list);
         System.out.println();
 //        removeDuplication(list);
@@ -48,7 +60,7 @@ public class TestDrivedeveloping {
         System.out.println(intersections1);
         System.out.println(findMostRepeatedStation(intersections1)); //43 & 46 done 12
 //        var testMyAlgo = list;
-//        removeConnectionsWithMostRepeatedStation(testMyAlgo);
+///        removeConnectionsWithMostRepeatedStation(testMyAlgo);
 //        System.out.println(testMyAlgo);
         System.out.println(System.lineSeparator());
         System.out.println("Intersection2:");
@@ -71,11 +83,11 @@ public class TestDrivedeveloping {
         System.out.println(findMostRepeatedStation( intersections2_1));
 
 
-//        List<String> maxList2_1 = findMaxList(intersections2_1);
-//
-//        System.out.println(maxList2_1);
-//
-//        List<List<String>> intersections3_1 = findCommonStationsTrainLines(intersections2_1,maxList2_1);
+///        List<String> maxList2_1 = findMaxList(intersections2_1);
+///
+///        System.out.println(maxList2_1);
+///
+///        List<List<String>> intersections3_1 = findCommonStationsTrainLines(intersections2_1,maxList2_1);
 //        System.out.println(intersections3_1);
 
         System.out.println(System.lineSeparator());
@@ -112,9 +124,9 @@ public class TestDrivedeveloping {
 //        System.out.println(linkedReduction);
         System.out.println(System.lineSeparator());
 //        System.out.println("The conversion of 2D List to List of paired element:");
-//        var pairs = convertToPairsUsingStream(reduction_2);
+///        var pairs = convertToPairsUsingStream(reduction_2);
 //        System.out.println(pairs);
-//        System.out.println("\n max repeated:");
+///        System.out.println("\n max repeated:");
 //        System.out.println(findMostRepeatedEntry(pairs));
         List<List<String>> reduction_2_1 = new ArrayList<>();
         reduction_2_1.add(List.of("S","DA","H","K"));
@@ -124,12 +136,12 @@ public class TestDrivedeveloping {
         System.out.println(System.lineSeparator());
 
 //        System.out.println("The original 2D List from Task sheet:");
-//        System.out.println(reduction_2_1);
+///        System.out.println(reduction_2_1);
 //        var pairs_2_1 = convertToPairsUsingStream(reduction_2_1);
 //        System.out.println("The  paired List from Task sheet:");
-//        System.out.println(pairs_2_1);
+///        System.out.println(pairs_2_1);
 //        System.out.println("\n max repeated:");
-//        System.out.println(findMostRepeatedEntry(pairs_2_1));
+///        System.out.println(findMostRepeatedEntry(pairs_2_1));
 
         System.out.println(System.lineSeparator());
         List<List<String>> reduction_2_2 = new ArrayList<>();
@@ -204,7 +216,7 @@ public class TestDrivedeveloping {
 //    public static void removeConnectionsWithMostRepeatedStation(List<List<String>> connections) {
 //        // find the most repeated station
 //        String mostRepeatedStation = findMostRepeatedStation(connections);
-//        // remove all sublists that contain it
+///        // remove all sublists that contain it
 //        connections.removeIf(sublist -> sublist.contains(mostRepeatedStation));
 //    }
 
@@ -215,6 +227,26 @@ public class TestDrivedeveloping {
         // return the variable or null if not present
         return mostRepeatedEntry.orElse(null);
     }
+
+//    private static List<Map.Entry<String, Long>> findMostRepeatedStations(List<List<String>> connections) {
+//        Map<String, Long> frequencyMap = connections.stream().flatMap(List::stream).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+//        long maxFrequency = frequencyMap.values().stream().max(Long::compare).orElse(0L);
+//        return frequencyMap.entrySet().stream().filter(entry -> entry.getValue() == maxFrequency).collect(Collectors.toList());
+//    }
+//private static Map<List<String>, Long> findMostRepeatedStations(List<List<String>> connections) {
+//    Map<List<String>, Long> frequencyMap = connections.stream().collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+///    long maxFrequency = frequencyMap.values().stream().max(Long::compare).orElse(0L);
+//    return frequencyMap.entrySet().stream().filter(entry -> entry.getValue() == maxFrequency).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+//}
+
+    private static Map.Entry<Long, List<String>> findMostRepeatedStations(List<List<String>> connections) {
+        Map<String, Long> frequencyMap = connections.stream().flatMap(List::stream).collect(Collectors.groupingBy(Function.identity(), Collectors.counting()));
+        long maxFrequency = frequencyMap.values().stream().max(Long::compare).orElse(0L);
+        List<String> mostRepeatedStations = frequencyMap.entrySet().stream().filter(entry -> entry.getValue() == maxFrequency).map(Map.Entry::getKey).toList();
+        return new AbstractMap.SimpleEntry<>(maxFrequency, mostRepeatedStations);
+    }
+
+
 //TODO
 // Step 1: remove all duplication of sublists in 2 D List. Done
 // Step 2: find the max sublist from 2D List and remove it from the 2D List.
@@ -257,14 +289,20 @@ public class TestDrivedeveloping {
         while (!done) {
             // Perform your steps here
             List<String> maxList = findMaxList(connections);
+            Map.Entry<Long, List<String>> firstMostRepeats = findMostRepeatedStations(connections);
+            System.out.println(maxList);
+            System.out.println(connections);
             List<List<String>> intersections = findCommonStationsTrainLines(connections, maxList);
-            Map.Entry<String, Long> mostRepeated = findMostRepeatedStation(intersections);
-            if (mostRepeated == null) {
-                break;
+            Map.Entry<Long, List<String>> secondMostRepeats = findMostRepeatedStations(intersections);
+            System.out.println("findMostRepeatedStations" + findMostRepeatedStations(intersections));
+            List<String> newStation = new ArrayList<>();
+            if (secondMostRepeats.getKey() >= 1 && result.stream().noneMatch(secondMostRepeats.getValue()::contains)) {
+                newStation =  new ArrayList<>(secondMostRepeats.getValue());
+                newStation.retainAll(maxList);
+                System.out.println("New Station: " + newStation);
+                System.out.println("Station1: "+secondMostRepeats.getKey());
+                result.add(newStation.getFirst());
             }
-            if (mostRepeated.getValue() >= 1 && !result.contains(mostRepeated.getKey()))
-                result.add(mostRepeated.getKey());
-
             // Check if there are more connections to process
             if (connections.isEmpty()) {
                 // If not, set the flag to true
@@ -273,13 +311,22 @@ public class TestDrivedeveloping {
                 // If yes, update the connections and intersections
                 List<List<String>> newConnections = findCommonStationsTrainLines(intersections, findMaxList(intersections));
                 maxList = findMaxList(connections);
+                System.out.println(maxList);
+                System.out.println(connections);
                 lastIntersection = findCommonStationsTrainLines(newConnections, maxList);
+                System.out.println("LastIntersection: "+ lastIntersection);
+
             }
             if (!lastIntersection.isEmpty() &&
-                    findMostRepeatedStation(lastIntersection) != null) {
+                    !findMostRepeatedStations(lastIntersection).getValue().isEmpty()) {
                 // Add it to the result list
-                Map.Entry<String, Long> lastMostRepeated =  findMostRepeatedStation(lastIntersection);
-                if (lastMostRepeated.getValue() >= 1 && !result.contains(lastMostRepeated.getKey())) result.add(lastMostRepeated.getKey());
+                Map.Entry<Long, List<String>> lastMostRepeated =  findMostRepeatedStations(lastIntersection);
+                if (lastMostRepeated.getKey() >= 1 && result.stream().noneMatch(lastMostRepeated.getValue()::contains)) {
+                    System.out.println("Station2: "+lastMostRepeated.getKey());
+                    newStation =  new ArrayList<>(lastMostRepeated.getValue());
+                    newStation.retainAll(maxList);
+                    result.add(newStation.getFirst());
+                }
             }
         }
 
@@ -293,7 +340,7 @@ public class TestDrivedeveloping {
 
 //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 //    rul 1
-//    private static void removeStationDuplication(List<List<String>> connections) {
+///    private static void removeStationDuplication(List<List<String>> connections) {
 //        connections.replaceAll(connection -> connection.stream().distinct().toList());
 //    }
 
@@ -316,7 +363,7 @@ public class TestDrivedeveloping {
 
 //    private static List<List<String>> removeDuplicates(List<List<String>> list) {
 //
-//
+///
 //
 //    }
 
@@ -375,7 +422,7 @@ public class TestDrivedeveloping {
 //    }
 //    private static void findAndRemoveSubsets(List<List<String>> list, List<String> sublist) {
 //        List<List<String>> result = list.stream()
-//                .filter(l -> new HashSet<>(l).containsAll(sublist)).toList();
+///                .filter(l -> new HashSet<>(l).containsAll(sublist)).toList();
 //        // Remove the result list from the original list
 //        list.removeAll(result);
 //    }
@@ -397,7 +444,7 @@ private static void removeSuperSets(List<List<String>> list) {
 
 //    public static String findAndRemoveMostRepeatedEntry(List<Map.Entry<String, String>> list) {
 //        // create a stream of entries from the list
-//        Stream<Map.Entry<String, String>> stream = list.stream ();
+///        Stream<Map.Entry<String, String>> stream = list.stream ();
 //        // collect the stream into a map of entries to their frequency
 //        Map<Map.Entry<String, String>, Long> frequencyMap = stream
 //                // group the entries by their key and value
@@ -491,7 +538,7 @@ private static void removeSuperSets(List<List<String>> list) {
 //            // get the index of the most repeated entry in the list
 //            int index = list.indexOf (entry);
 //            // check if the index is valid and not at the beginning
-//            if (index > 0 && index < list.size ()) {
+//            if (index > 0 && index < list.size ()) {thirdReduceConnections
 //                // get the key and value of the entry before it in the list
 //                String previousKey = list.get (index - 1).getKey ();
 //                String previousValue = list.get (index - 1).getValue ();

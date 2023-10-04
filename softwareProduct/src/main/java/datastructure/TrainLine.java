@@ -2,10 +2,7 @@ package datastructure;
 
 import exception.InvalidTrainLineException;
 
-import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 /**
  * This class represent a trin
@@ -42,7 +39,8 @@ public class TrainLine implements Cloneable {
     public void addFrom() {
         List<String >  t = new ArrayList<>();
         t.add("A");
-        LinkedList<String> test = new LinkedList<>(t);
+        LinkedHashSet<String> test = new LinkedHashSet<>(t);
+
         var to = test.contains("A");
 
     }
