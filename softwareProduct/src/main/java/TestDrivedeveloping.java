@@ -289,18 +289,18 @@ public class TestDrivedeveloping {
         while (!done) {
             // Perform your steps here
             List<String> maxList = findMaxList(connections);
-            Map.Entry<Long, List<String>> firstMostRepeats = findMostRepeatedStations(connections);
+//            Map.Entry<Long, List<String>> firstMostRepeats = findMostRepeatedStations(connections);
             System.out.println(maxList);
             System.out.println(connections);
             List<List<String>> intersections = findCommonStationsTrainLines(connections, maxList);
-            Map.Entry<Long, List<String>> secondMostRepeats = findMostRepeatedStations(intersections);
+            Map.Entry<Long, List<String>> firstMostRepeats = findMostRepeatedStations(intersections);
             System.out.println("findMostRepeatedStations" + findMostRepeatedStations(intersections));
             List<String> newStation = new ArrayList<>();
-            if (secondMostRepeats.getKey() >= 1 && result.stream().noneMatch(secondMostRepeats.getValue()::contains)) {
-                newStation =  new ArrayList<>(secondMostRepeats.getValue());
+            if (firstMostRepeats.getKey() >= 1 && result.stream().noneMatch(firstMostRepeats.getValue()::contains)) {
+                newStation =  new ArrayList<>(firstMostRepeats.getValue());
                 newStation.retainAll(maxList);
                 System.out.println("New Station: " + newStation);
-                System.out.println("Station1: "+secondMostRepeats.getKey());
+                System.out.println("Station1: "+firstMostRepeats.getKey());
                 result.add(newStation.getFirst());
             }
             // Check if there are more connections to process

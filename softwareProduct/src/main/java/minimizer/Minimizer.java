@@ -8,6 +8,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
+//TODO repair the MinimizerTest prosovical
 
 /**
  * Minimizer
@@ -54,10 +55,10 @@ public class Minimizer implements Handleable<TrainConnectionJob, Minimization>, 
 //        thirdReduceConnections(connections);
         DataReducer reducer = new DataReducer(connections);
 //        reducer.secondReduceConnections(connections);
-        reducer.thirdReduceConnections();
+//        reducer.thirdReduceConnections();
 
-//        return new Minimization(findPopularRoute(issue.getConnections()));
-        return new Minimization(findPopularRoute(reducer.getConnections()));
+        return new Minimization(findPopularRoute(issue.getConnections()));
+//        return new Minimization(findPopularRoute(reducer.getConnections()));
     }
 
     /**
@@ -97,7 +98,7 @@ public class Minimizer implements Handleable<TrainConnectionJob, Minimization>, 
                 lastIntersection = findCommonStationsTrainLines(newConnections, maxList);
             }
             if (!lastIntersection.isEmpty() &&
-                findMostRepeatedStations(lastIntersection).getValue().isEmpty()) {
+                !findMostRepeatedStations(lastIntersection).getValue().isEmpty()) {
                 // Add it to the result list
                 Map.Entry<Long, List<String>> lastMostRepeated = findMostRepeatedStations(lastIntersection);
                 if (lastMostRepeated.getKey() >= 1 && result.stream().noneMatch(lastMostRepeated.getValue()::contains)) {
@@ -132,14 +133,6 @@ public class Minimizer implements Handleable<TrainConnectionJob, Minimization>, 
     }
 
 
-    private Map.Entry<String, Long> findMostRepeatedStation(List<LinkedList<String>> connections) {
-        // store the result of the max operation in a variable
-        Optional<Map.Entry<String, Long>> mostRepeatedEntry = connections.stream().flatMap(List::stream).collect(Collectors.groupingBy(
-                Function.identity (), Collectors.counting ())).entrySet().stream().max(Map.Entry.comparingByValue ());
-        // return the variable or null if not present
-        return mostRepeatedEntry.orElse(null);
-    }
-
     /**
      * This method takes in a list of lists of strings representing train line connections and
      * returns a Map.Entry object containing the most repeated station and its frequency.
@@ -171,7 +164,7 @@ public class Minimizer implements Handleable<TrainConnectionJob, Minimization>, 
      *  Starts the thread and gets data from the DataStream provided by the Producer,
      *  transforms it and wraps the original and transformed data in {@link Data}
      *  and adds it to the ConcurrentLinkedQueue for the consumer.
-     *  Finishes when Messdaten without filepath are received.
+     *  Finishes when input data without filepath are received.
      */
     @Override
     public void run() {

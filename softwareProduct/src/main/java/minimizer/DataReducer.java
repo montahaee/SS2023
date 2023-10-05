@@ -1,5 +1,7 @@
 package minimizer;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -30,17 +32,18 @@ public class DataReducer {
      * This method is based on the second reduction technic in the task sheet.
 //     * @param connections represent all possible connections between trains.
      */
-    public void secondReduceConnections() {
+    public void secondReduceConnections(@NotNull List<LinkedList<String>> connections) {
         boolean hasRepeatedPair = true;
         while (hasRepeatedPair) {
             // convert the 2D list into a list of pairs
             List<Map.Entry<String, String>> pairs = convertConnectionsToLinePairs(connections);
             // remove the most repeated pair and get the station and the frequency
-            Map.Entry<String, Long> result = removeMostRepeatedTrainLine(pairs);
+//            Map.Entry<String, Long> result = removeMostRepeatedTrainLine(pairs);
+            String result = removeMostRepeatedTrainLine(pairs);
             // check if the frequency is greater than or equal to 2
-            if (result != null && result.getValue() >= 2) {
+            if (result != null) {
                 // remove the station from the 2D list
-                removeStationFromConnections(connections, result.getKey());
+                removeStationFromConnections(connections, result);
             } else {
                 hasRepeatedPair = false;
             }
@@ -65,21 +68,23 @@ public class DataReducer {
      * @return  return a Map.Entry with the key of the most repeated train station
      * and the number of repetition as the value or null if the list is empty.
      */
-    private Map.Entry<String, Long> removeMostRepeatedTrainLine(List<Map.Entry<String, String>> list) {
-        Stream<Map.Entry<String, String>> stream = list.stream ();
-        Map<Map.Entry<String, String>, Long> frequencyMap = stream
-                .collect (Collectors.groupingBy (
-                        Function.identity (),
-                        Collectors.counting ()));
-        // find the entry with the maximum frequency
-        Optional<Map.Entry<Map.Entry<String, String>, Long>> mostRepeatedEntry = frequencyMap.entrySet ().stream ()
-                // compare the entries by their frequency
-                .max (Map.Entry.comparingByValue ());
-        // remove the most repeated entry from the list if present
-        mostRepeatedEntry.ifPresent (entry -> list.remove (entry.getKey ()));
-        return mostRepeatedEntry.map (entry -> new AbstractMap.SimpleEntry<> (
-                entry.getKey ().getKey (), entry.getValue ())).orElse (null);
+    private String removeMostRepeatedTrainLine(@NotNull List<Map.Entry<String, String>> list) {
+        Map<Map.Entry<String, String>, Long> frequencyMap = list.stream()
+                .collect(Collectors.groupingBy(
+                        Function.identity(),
+                        Collectors.counting()));
+
+        Optional<Map.Entry<Map.Entry<String, String>, Long>> mostRepeatedEntry = frequencyMap.entrySet().stream().filter(e -> {
+                    String innerKey = e.getKey().getKey();
+                    String innerVal = e.getKey().getValue();
+                    boolean isUnique = frequencyMap.entrySet().stream().noneMatch(
+                            entry -> entry.getKey().getKey().equals(innerKey) && !entry.getKey().getValue().equals(innerVal));
+                    return isUnique && e.getValue() >= 2;
+                }).max(Map.Entry.comparingByValue());
+
+        return mostRepeatedEntry.map(e -> e.getKey().getKey()).orElse(null);
     }
+
 
     /**
      *
@@ -106,7 +111,7 @@ public class DataReducer {
      * reduces the connections by removing subsets.
 //     * @param connections A list of lists of strings representing train line connections.
      */
-    public void thirdReduceConnections() {
+    public void thirdReduceConnections(List<LinkedList<String>> connections) {
         List<LinkedList<String>> copy = new ArrayList<>(connections);
 
         for (LinkedList<String> subset : copy) {
