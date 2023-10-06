@@ -4,7 +4,7 @@ import exception.InvalidCommandLineArgumentsException;
 import framework.CommandLineArguments;
 import framework.CommandLineArgumentsParser;
 import framework.Handleable;
-import minimizer.Minimizer;
+import minimizer.ServiceStationMinimizer;
 
 import java.time.LocalDateTime;
 import java.util.concurrent.LinkedBlockingQueue;
@@ -37,12 +37,12 @@ public class Programm {
             FileSupplier producer = new FileSupplier(source, connectionsDataQueue);
 
             LinkedBlockingQueue<Handleable.Data<TrainConnectionJob, Minimization>> handleQueue = new LinkedBlockingQueue<>() ;
-            Minimizer minimizer = new Minimizer(connectionsDataQueue, handleQueue);
+            ServiceStationMinimizer serviceStationMinimizer = new ServiceStationMinimizer(connectionsDataQueue, handleQueue);
 
             FileConsumer consumer = new FileConsumer(handleQueue);
 
             Thread reading = new Thread(producer,"Reading input data");
-            Thread processing = new Thread(minimizer,"Processing of data");
+            Thread processing = new Thread(serviceStationMinimizer,"Processing of data");
             Thread writing = new Thread(consumer,"Writing the output data");
 
             reading.start();

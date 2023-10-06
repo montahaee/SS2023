@@ -1,5 +1,6 @@
 package minimizer;
 
+import IO.FileSupplier;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
@@ -7,14 +8,17 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
-
 /**
  * The DataReducer class is responsible for reduction of the input data
  * assigned to train line connections {@link IO.TrainConnectionJob}.It provides functionality
  * to remove redundancy and unnecessary inputs to reduce the calculation of the best candidate
- * places for train station service applied by class {@link Minimizer}
+ * places for train station service applied by class {@link ServiceStationMinimizer}
  * This class is crucial for scenarios where there is a large set of connections,
- * and there's a need to make the data more manageable and the processing more efficient.
+ * and there's a need to make the data more manageable and the processing more efficient.<br>
+ * <U>Notice: the first rul is done automatically by reading the input data </U>
+ * of the file in {@link FileSupplier#read()}, without loss of information to find
+ * the minimization of the number of the train service and their corresponding train
+ * stations, which is applied in the {@link ServiceStationMinimizer} class.
  */
 public class DataReducer {
 
@@ -30,7 +34,7 @@ public class DataReducer {
 
     /**
      * This method is based on the second reduction technic in the task sheet.
-//     * @param connections represent all possible connections between trains.
+     * @param connections represent all possible connections between trains.
      */
     public void secondReduceConnections(@NotNull List<LinkedList<String>> connections) {
         boolean hasRepeatedPair = true;
@@ -55,7 +59,7 @@ public class DataReducer {
      * @param connections represent all possible connections between trains.
      * @param station Teh train station which will be removed from the connections.
      */
-    private void removeStationFromConnections(List<LinkedList<String>> connections, String station) {
+    private void removeStationFromConnections(@NotNull List<LinkedList<String>> connections, String station) {
         Stream<LinkedList<String>> stream = connections.parallelStream ();
         stream.forEach (sublist -> sublist.remove (station));
     }
@@ -109,7 +113,7 @@ public class DataReducer {
     /**
      * This method takes in a list of lists of strings representing train line connections and
      * reduces the connections by removing subsets.
-//     * @param connections A list of lists of strings representing train line connections.
+     * @param connections A list of lists of strings representing train line connections.
      */
     public void thirdReduceConnections(List<LinkedList<String>> connections) {
         List<LinkedList<String>> copy = new ArrayList<>(connections);

@@ -12,12 +12,12 @@ import java.util.concurrent.LinkedBlockingQueue;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class MinimizerTest {
+class ServiceStationMinimizerTest {
 
-    Minimizer minimizer;
+    ServiceStationMinimizer serviceStationMinimizer;
     @BeforeEach
     void setUp() {
-        minimizer = new Minimizer(new DataStream<>(),new LinkedBlockingQueue<>());
+        serviceStationMinimizer = new ServiceStationMinimizer(new DataStream<>(),new LinkedBlockingQueue<>());
     }
 
     @Test
@@ -36,7 +36,7 @@ class MinimizerTest {
 
         Set<String> expected = new LinkedHashSet<> (Arrays.asList("FFM","H"));
 
-        assertEquals(expected, minimizer.handle(connectionJob).stations());
+        assertEquals(expected, serviceStationMinimizer.handle(connectionJob).stations());
     }
 
 }

@@ -96,7 +96,7 @@ public class TestDrivedeveloping {
         List<String> maxList3 = findMaxList(intersections2);
         System.out.println(maxList3);
         List<List<String>> intersections3 = findCommonStationsTrainLines(intersections2,maxList3);
-        System.out.println(intersections3); //TODO how to avoid /remove the duplications in every List of 2D List (next Step Reduction Minimizer)
+        System.out.println(intersections3); //TODO how to avoid /remove the duplications in every List of 2D List (next Step Reduction ServiceStationMinimizer)
         removeDuplication(intersections3);
         System.out.println(intersections3);
 

@@ -2,26 +2,23 @@ package minimizer;
 
 import IO.*;
 import framework.Handleable;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-//TODO repair the MinimizerTest prosovical
 
 /**
- * Minimizer
- * <U>Notice: the first rul is done automatically by reading the input data </U>
- * of the file in {@link FileSupplier#read()}, without loss of information to find
- * the minimization of the number of the train service and their corresponding train
- * stations, which is also applied in this class.
+ * ServiceStationMinimizer is a class to minimize the service stations for the train lines s.t.
+ * each train line contains at least one of them (service station).
  * <P></P>
- * Minimizer can run as a thread and will obtain new {@link TrainConnectionJob} from
+ * ServiceStationMinimizer can run as a thread and will obtain new {@link TrainConnectionJob} from
  * the {@link DataStream dataStream}, transform the data and make the data available for the
  * consumer {@link FileConsumer} in a ConcurrentLinkedQueue.
  */
-public class Minimizer implements Handleable<TrainConnectionJob, Minimization>, Runnable {
+public class ServiceStationMinimizer implements Handleable<TrainConnectionJob, Minimization>, Runnable {
 
     private final DataStream<TrainConnectionJob> connectionsDataQueue;
     private final LinkedBlockingQueue<Data<TrainConnectionJob, Minimization>> handleQueue;
@@ -32,7 +29,7 @@ public class Minimizer implements Handleable<TrainConnectionJob, Minimization>, 
      * @param handleQueue Queue that passes transformed data to consumer.
      */
 
-    public Minimizer(DataStream<TrainConnectionJob> connectionsDataQueue, LinkedBlockingQueue<Data<TrainConnectionJob, Minimization>> handleQueue) {
+    public ServiceStationMinimizer(DataStream<TrainConnectionJob> connectionsDataQueue, LinkedBlockingQueue<Data<TrainConnectionJob, Minimization>> handleQueue) {
         this.connectionsDataQueue = connectionsDataQueue;
         this.handleQueue = handleQueue;
     }
@@ -44,17 +41,15 @@ public class Minimizer implements Handleable<TrainConnectionJob, Minimization>, 
      * @return the handle object
      */
     @Override
-    public Minimization handle(TrainConnectionJob issue) {
-        List<LinkedList<String>> connections = issue.getConnections();
+    public Minimization handle(@NotNull TrainConnectionJob issue) {
 /*        The followings are commented because of the testing
           the reduction rules in MinimizerTest. After testing,
           You can uncomment those.
  */
+//        List<LinkedList<String>> connections = issue.getConnections();
 
-///        secondReduceConnections(connections);
-//        thirdReduceConnections(connections);
-        DataReducer reducer = new DataReducer(connections);
-//        reducer.secondReduceConnections(connections);
+//        DataReducer reducer = new DataReducer(connections);
+///        reducer.secondReduceConnections(connections);
 //        reducer.thirdReduceConnections();
 
         return new Minimization(findPopularRoute(issue.getConnections()));
@@ -67,9 +62,9 @@ public class Minimizer implements Handleable<TrainConnectionJob, Minimization>, 
      * for service station.
      * @param connections A list of lists of strings
      *                    representing train line connections.
-     * @return A list of popular routes for srvice stations.
+     * @return A list of popular routes for service stations.
      */
-    private Set<String> findPopularRoute(List<LinkedList<String>> connections) {
+    private @NotNull Set<String> findPopularRoute(List<LinkedList<String>> connections) {
         boolean findAllRoute = false;
 
         List<LinkedList<String>> lastIntersection = new ArrayList<>();
@@ -80,7 +75,7 @@ public class Minimizer implements Handleable<TrainConnectionJob, Minimization>, 
             LinkedList<String> maxList = findMaxList(connections);
             List<LinkedList<String>> commonLines = findCommonStationsTrainLines(connections, maxList);
             Map.Entry<Long, List<String>> firstMostRepeats = findMostRepeatedStations(commonLines);
-            LinkedList<String> newStation = new LinkedList<>();
+            LinkedList<String> newStation;
 
             if (firstMostRepeats.getKey() >= 1 && result.stream().noneMatch(firstMostRepeats.getValue()::contains)) {
                 newStation = new LinkedList<>(firstMostRepeats.getValue());
@@ -122,7 +117,7 @@ public class Minimizer implements Handleable<TrainConnectionJob, Minimization>, 
      * @return A list of lists of strings representing the common stations between
      * the train lines in connections and the pivot train line.
      */
-    private List<LinkedList<String>> findCommonStationsTrainLines(List<LinkedList<String>> connections, List<String> pivot) {
+    private @NotNull List<LinkedList<String>> findCommonStationsTrainLines(@NotNull List<LinkedList<String>> connections, List<String> pivot) {
         List<LinkedList<String>> intersections = new ArrayList<>();
         for (LinkedList<String> connection : connections) {
             LinkedList<String> copy = new LinkedList<>(connection);
@@ -139,7 +134,7 @@ public class Minimizer implements Handleable<TrainConnectionJob, Minimization>, 
      * @param connections A list of lists of strings representing train line connections.
      * @return A Map.Entry object containing the most repeated station and its frequency.
      */
-    private static Map.Entry<Long, List<String>> findMostRepeatedStations(List<LinkedList<String>> connections) {
+    private static Map.@NotNull Entry<Long, List<String>> findMostRepeatedStations(@NotNull List<LinkedList<String>> connections) {
         Map<String, Long> frequencyMap = connections.stream().flatMap(List::stream).collect(Collectors.groupingBy(
                 Function.identity(), Collectors.counting()));
         long maxFrequency = frequencyMap.values().stream().max(Long::compare).orElse(0L);
