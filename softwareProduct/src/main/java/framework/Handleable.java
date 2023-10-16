@@ -27,6 +27,10 @@ public interface Handleable<I,R> {
         public R out;
     }
 
+    enum Request {
+        REDUCE, MINIMIZE
+    }
+
     /**
      *Takes an issue performs the transformation in form of handle and returns the result.
      * @param issue - the specified issue that has to be solved.

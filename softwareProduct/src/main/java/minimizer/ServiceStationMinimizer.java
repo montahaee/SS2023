@@ -52,7 +52,7 @@ public class ServiceStationMinimizer implements Handleable<TrainConnectionJob, M
 ///        reducer.secondReduceConnections(connections);
 //        reducer.thirdReduceConnections();
 
-        return new Minimization(findPopularRoute(issue.getConnections()));
+        return new Minimization(findPopularRoute(issue.getConnections()),connectionsDataQueue.take().getFilepath());
 //        return new Minimization(findPopularRoute(reducer.getConnections()));
     }
 

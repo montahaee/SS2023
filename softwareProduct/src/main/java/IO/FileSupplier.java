@@ -66,27 +66,6 @@ public class FileSupplier implements Suppliable<TrainConnectionJob>, Runnable {
     }
 
     /**
-     *
-     * @param current  A path of the file that is looking for to its derivations.
-     * @param filenameWithoutExtension A file path which can be derived by #current.
-     * @return True if the file independent of its extension derived by  #current.
-     */
-    private boolean isFileExit(@NotNull Path current, String filenameWithoutExtension) {
-        File[] listOfFiles = current.getParent().toFile().listFiles();
-        for(File file : listOfFiles != null ? listOfFiles : new File[0]) {
-            if (file.isFile()){
-
-                String filename = file.getAbsolutePath().split("\\.(?=[^.]+$)")[0];
-                if (filename.equalsIgnoreCase(filenameWithoutExtension)
-                        || filenameWithoutExtension.equals(filename) ) {
-                    return true;
-                }
-            }
-        }
-        return false;
-    }
-
-    /**
      * Reads data from a file in the {@link #sourcePath} and produces specified element.
      * <p>
      *
@@ -102,8 +81,11 @@ public class FileSupplier implements Suppliable<TrainConnectionJob>, Runnable {
             boolean isDuplicated = false;
             boolean isFirstLine = true;
             String abbreviation = "^[a-zA-Z]\\w*$";
+            int count = 0;
             while ((line = bf.readLine()) != null) {
+                count++;
                 if (isFirstLine && !line.startsWith("#")) {
+
                     System.out.println("We could not find a comment line in file: " + sourcePath.getFileName());
                     System.out.println("Reading File will be processed without comment.");
                     isFirstLine = false;
@@ -114,39 +96,42 @@ public class FileSupplier implements Suppliable<TrainConnectionJob>, Runnable {
                         line = line.substring(0,line.indexOf("#"));
                     }
                     if (line.isEmpty()) {
-                        line = line.replaceAll("\\s", "");
+//                        line = line.replaceAll("\\s", "");
+                        continue;
                     }
+                    // Check if the train line consists at least two stations like A;B
                     if ((lineContents = line.trim().split(";")).length >= 1) {
                         LinkedList<String> temp = new LinkedList<>();
-                        for (String content : lineContents) {
-                            if (!content.matches(abbreviation)) {
-                                System.out.println("Unexpected token in the input file: " + sourcePath.getFileName());
-                                System.out.println("An abbreviation is expected!");
+                        for (int i=0; i < lineContents.length; i++) {
+                            String wrongLinePosition = "in " + count + ((count == 2)? "nd" : "th") + " line";
+                            String wrongTokenPosition = " at the " + (i + 1) + ((i == 2)? "nd" : "th")+" token " ;
+                            if (!lineContents[i].matches(abbreviation)) {
+                                System.out.println("Unexpected token in the input file: " + sourcePath.getFileName() + wrongLinePosition);
+                                System.out.println("An abbreviation" + wrongTokenPosition +" expected!");
                                 System.out.println("Reading line will continue to find an abbreviation!");
 
                                 continue;
-                            } else if (temp.contains(content)) {
+                            } else if (temp.contains(lineContents[i])) {
                                 System.out.println(System.lineSeparator());
-                                System.out.println("Notice: in the input file: " + sourcePath.getFileName());
+                                System.out.println("Notice in the input file " + sourcePath.getFileName() + wrongLinePosition);
                                 System.out.println("A duplication is found. The abbreviation '" +
-                                content + "' will not be added" + System.lineSeparator() +
+                                lineContents[i] + "'" + wrongTokenPosition + "will not be added" + System.lineSeparator() +
                                         "in the train line list (Reduction technic 1!)" );
                                 System.out.println(System.lineSeparator());
 
                                 continue;
                             }
-                            temp.add(content);
+                            temp.add(lineContents[i]);
                         }
                         if (connections.contains(temp)) {
                             System.out.println("Duplication! the Train line will not be added in the list!");
                         } else if (!temp.isEmpty()) {
                             connections.add(temp);
                         } else {
-//                           readable = false;
-                           massage = "No abbreviation found in the input File.";
+//                            Find sutible interface to handle the path between FileSupplier and FiileConsumer.
+                           massage = "No abbreviation found in the input File." ;
                            System.out.println(System.lineSeparator());
                            System.out.println(massage.replace(".",": ") + sourcePath.getFileName());
-                           continue;
                         }
                     }
                 }
@@ -196,13 +181,14 @@ public class FileSupplier implements Suppliable<TrainConnectionJob>, Runnable {
 
             for (Path path : filepaths) {
 
-                String outputFilename = path.toString().substring(0,
-                        path.toString().lastIndexOf(fileSeparator)+1);
-                outputFilename += "optimized_";
-                outputFilename +=  path.toString().substring(path.toString().lastIndexOf(fileSeparator)+1,
-                        path.toString().lastIndexOf("."));
-
-                if (isFileExit(path,outputFilename)) {
+//                String outputFilename = path.toString().substring(0,
+//                        path.toString().lastIndexOf(fileSeparator)+1);
+//                outputFilename += "optimized_";
+//                outputFilename +=  path.toString().substring(path.toString().lastIndexOf(fileSeparator)+1,
+//                        path.toString().lastIndexOf("."));
+//
+//                if (isFileExist(path,outputFilename)) {
+                if (FilenameUtils.isFileExist(path)) {
                     processedFiles.add(path);
 
                     continue;

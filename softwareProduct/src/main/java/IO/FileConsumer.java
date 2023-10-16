@@ -47,12 +47,8 @@ public class FileConsumer implements Consumable<Handleable.Data<TrainConnectionJ
         if (inputPath.indexOf(".") <= 0) {
             throw new InputMismatchException("The input data doesn't have extension.");
         }
-        String fileSeparator = File.separator;
 
-        String targetPath = inputPath.substring(0,
-                inputPath.lastIndexOf(fileSeparator)+1);
-        targetPath += "optimized_";
-        targetPath += inputPath.substring(inputPath.lastIndexOf(fileSeparator) + 1, inputPath.lastIndexOf("."));
+        String targetPath = FilenameUtils.generateOutputFilename(inputPath);
 
         StringBuilder sb = new StringBuilder();
         if (out.stations().isEmpty()){

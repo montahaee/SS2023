@@ -8,7 +8,12 @@ import java.util.Set;
  * This class represents die expected output data namely minimized location data regarding
  * service station, which will be written as location in the {@link FileConsumer#write(Handleable.Data)}.
  */
-public record Minimization(Set<String> stations) {
+public record Minimization(Set<String> stations, String path) {
+
+    public enum Extension {
+        OUT, ERR
+    }
+
     /**
      * An explicit construction for minimization.
      *
@@ -18,7 +23,7 @@ public record Minimization(Set<String> stations) {
     }
 
     /**
-     * @return A list of popular routes for srvice stations.
+     * @return A list of popular routes for service stations.
      */
     @Override
     public Set<String> stations() {
